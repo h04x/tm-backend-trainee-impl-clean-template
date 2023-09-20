@@ -1,0 +1,146 @@
+basePath: /v1
+definitions:
+  entity.DoGetRequest:
+    properties:
+      from:
+        example: "2006-01-02"
+        type: string
+      order:
+        enum:
+        - Date
+        - Views
+        - Clicks
+        - Cost
+        - Cpc
+        - Cpm
+        example: cpc
+        type: string
+      to:
+        example: "2006-01-02"
+        type: string
+    required:
+    - from
+    - to
+    type: object
+  entity.Metrics:
+    properties:
+      clicks:
+        example: 5
+        type: integer
+      cost:
+        example: "1.25"
+        type: string
+      date:
+        example: "2006-01-02"
+        type: string
+      views:
+        example: 5
+        type: integer
+    required:
+    - date
+    type: object
+  entity.Statistics:
+    properties:
+      cpc:
+        example: 0.21
+        type: number
+      cpm:
+        example: 1.23
+        type: number
+      metrics:
+        $ref: '#/definitions/entity.Metrics'
+    type: object
+  v1.response:
+    properties:
+      error:
+        example: message
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Using a translation service as an example
+  title: Go Clean Template API
+  version: "1.0"
+paths:
+  /statistics/clear:
+    delete:
+      consumes:
+      - application/json
+      description: Clear statistics
+      operationId: clear
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      summary: Clear statistics
+      tags:
+      - statistics
+  /statistics/get:
+    post:
+      consumes:
+      - application/json
+      description: Get statistics
+      operationId: get
+      parameters:
+      - description: Get statistics
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.DoGetRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Statistics'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      summary: Get statistics
+      tags:
+      - statistics
+  /statistics/save:
+    post:
+      consumes:
+      - application/json
+      description: Save statistics
+      operationId: save
+      parameters:
+      - description: Save statistics
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Metrics'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      summary: Save statistics
+      tags:
+      - statistics
+swagger: "2.0"

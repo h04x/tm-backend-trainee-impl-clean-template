@@ -1,0 +1,214 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Using a translation service as an example",
+        "title": "Go Clean Template API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/v1",
+    "paths": {
+        "/statistics/clear": {
+            "delete": {
+                "description": "Clear statistics",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "statistics"
+                ],
+                "summary": "Clear statistics",
+                "operationId": "clear",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    }
+                }
+            }
+        },
+        "/statistics/get": {
+            "post": {
+                "description": "Get statistics",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "statistics"
+                ],
+                "summary": "Get statistics",
+                "operationId": "get",
+                "parameters": [
+                    {
+                        "description": "Get statistics",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.DoGetRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entity.Statistics"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    }
+                }
+            }
+        },
+        "/statistics/save": {
+            "post": {
+                "description": "Save statistics",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "statistics"
+                ],
+                "summary": "Save statistics",
+                "operationId": "save",
+                "parameters": [
+                    {
+                        "description": "Save statistics",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.Metrics"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "entity.DoGetRequest": {
+            "type": "object",
+            "required": [
+                "from",
+                "to"
+            ],
+            "properties": {
+                "from": {
+                    "type": "string",
+                    "example": "2006-01-02"
+                },
+                "order": {
+                    "type": "string",
+                    "enum": [
+                        "Date",
+                        "Views",
+                        "Clicks",
+                        "Cost",
+                        "Cpc",
+                        "Cpm"
+                    ],
+                    "example": "cpc"
+                },
+                "to": {
+                    "type": "string",
+                    "example": "2006-01-02"
+                }
+            }
+        },
+        "entity.Metrics": {
+            "type": "object",
+            "required": [
+                "date"
+            ],
+            "properties": {
+                "clicks": {
+                    "type": "integer",
+                    "example": 5
+                },
+                "cost": {
+                    "type": "string",
+                    "example": "1.25"
+                },
+                "date": {
+                    "type": "string",
+                    "example": "2006-01-02"
+                },
+                "views": {
+                    "type": "integer",
+                    "example": 5
+                }
+            }
+        },
+        "entity.Statistics": {
+            "type": "object",
+            "properties": {
+                "cpc": {
+                    "type": "number",
+                    "example": 0.21
+                },
+                "cpm": {
+                    "type": "number",
+                    "example": 1.23
+                },
+                "metrics": {
+                    "$ref": "#/definitions/entity.Metrics"
+                }
+            }
+        },
+        "v1.response": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "message"
+                }
+            }
+        }
+    }
+}
